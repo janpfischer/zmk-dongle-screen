@@ -13,6 +13,7 @@ struct zmk_widget_wpm_status
 {
     lv_obj_t *obj;
     lv_obj_t *wpm_label;
+    lv_obj_t *font_test;
     sys_snode_t node;
 };
 

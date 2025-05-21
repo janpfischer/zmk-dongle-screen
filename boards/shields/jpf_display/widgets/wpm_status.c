@@ -16,7 +16,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include "wpm_status.h"
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
-
+extern const lv_font_t NerdFonts_Regular_20;
 struct wpm_status_state
 {
     int wpm;
@@ -59,6 +59,13 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
 
     widget->wpm_label = lv_label_create(widget->obj);
     lv_obj_align(widget->wpm_label, LV_ALIGN_TOP_RIGHT, -80, 40);
+
+    widget->font_test = lv_label_create(widget->obj);
+    lv_obj_set_style_text_font(widget->font_test, &NerdFonts_Regular_20, 0);
+    lv_obj_align(widget->font_test, LV_ALIGN_TOP_RIGHT, -80, 0);
+
+    lv_label_set_text(widget->font_test, "󰕓󰘳󰘵󰘶");
+    // TODO: Explizit als UTF-8 wert setzen?
 
     sys_slist_append(&widgets, &widget->node);
 

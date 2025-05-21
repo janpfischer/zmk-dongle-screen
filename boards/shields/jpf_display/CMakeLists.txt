@@ -15,5 +15,5 @@ if(CONFIG_SHIELD_JPF_ADAPTER)
   zephyr_library_sources(widgets/battery_status.c)
   zephyr_library_sources(widgets/layer_status.c)
   zephyr_library_sources(widgets/wpm_status.c)
-
+  zephyr_library_sources(widgets/NerdFonts_Regular_20.c)
 endif()
