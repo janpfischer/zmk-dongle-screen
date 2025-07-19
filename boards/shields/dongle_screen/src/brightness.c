@@ -6,6 +6,7 @@
 #include <zmk/event_manager.h>
 #include <zmk/events/keycode_state_changed.h>
 #include <zmk/events/layer_state_changed.h>
+#include <math.h>
 
 #include <stdlib.h>
 
@@ -25,8 +26,8 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #endif
 
 #define BRIGHTNESS_STEP 1
-#define BRIGHTNESS_DELAY_MS 20
-#define BRIGHTNESS_FADE_DURATION_MS 1000
+#define BRIGHTNESS_DELAY_MS 50
+#define BRIGHTNESS_FADE_DURATION_MS 2000
 #define SCREEN_IDLE_TIMEOUT_MS (CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S * 1000)
 
 static const struct device *pwm_leds_dev = DEVICE_DT_GET_ONE(pwm_leds);
@@ -65,6 +66,42 @@ static void apply_brightness(uint8_t value)
 
 static void fade_to_brightness(uint8_t from, uint8_t to)
 {
+    if (from == to) {
+        apply_brightness(to);
+        return;
+    }
+
+    int steps = abs(to - from);
+    float base_delay = BRIGHTNESS_DELAY_MS * 3.0f; // Starting delay (slower)
+    float decay_rate = 3.0f / steps; // Controls how fast it speeds up
+
+    if (from < to) {
+        for (int i = 0; i <= steps; i++) {
+            uint8_t b = from + i;
+            apply_brightness(b);
+
+            float factor = (float)i / steps;
+            int delay = (int)(base_delay * expf(-decay_rate * i));
+            k_msleep(delay > 1 ? delay : 1); // minimum 1 ms delay
+        }
+    } else {
+        for (int i = 0; i <= steps; i++) {
+            uint8_t b = from - i;
+            apply_brightness(b);
+
+            float factor = (float)i / steps;
+            int delay = (int)(base_delay * expf(-decay_rate * i));
+            k_msleep(delay > 1 ? delay : 1);
+        }
+    }
+
+    apply_brightness(to); // Ensure final value
+}
+
+/*
+
+static void fade_to_brightness(uint8_t from, uint8_t to)
+{
     if (from == to)
     {
         apply_brightness(to);
@@ -88,7 +125,7 @@ static void fade_to_brightness(uint8_t from, uint8_t to)
     }
     apply_brightness(to);
 }
-
+*/
 /*
 static void fade_to_brightness(uint8_t from, uint8_t to)
 {
