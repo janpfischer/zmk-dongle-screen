@@ -27,7 +27,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 #define BRIGHTNESS_STEP 1
 #define BRIGHTNESS_DELAY_MS 2
-#define BRIGHTNESS_FADE_DURATION_MS 800
+#define BRIGHTNESS_FADE_DURATION_MS 500
 #define SCREEN_IDLE_TIMEOUT_MS (CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S * 1000)
 
 static const struct device *pwm_leds_dev = DEVICE_DT_GET_ONE(pwm_leds);
@@ -88,23 +88,47 @@ static void fade_to_brightness(uint8_t from, uint8_t to)
     }
     */
 
-    const int duration = BRIGHTNESS_FADE_DURATION_MS;         
     const int step_delay = BRIGHTNESS_DELAY_MS;
-    const int steps = duration / step_delay;                    // Total number of steps in the fade
+    const int abs_diff = abs(to - from);                  // Total number of brightness steps in the fade
 
-    // Calculate the total brightness difference to interpolate
+    /*
+    Adjust the duration of the fade depending on how small the change is:
+        - Small changes -> longer fade
+        - For larger -> cap to avoid long transitions
+    */
+    int dynamic_duration = abs_diff < 4 ? 1000 : BRIGHTNESS_FADE_DURATION_MS;
+
+    // Clamp duration to always be between 500ms and 1000ms
+    if (dynamic_duration < 500)  dynamic_duration = 500;        // Minimum fade duration
+    if (dynamic_duration > 1000) dynamic_duration = 1000;       // Maximum fade duration
+
+    const int steps = dynamic_duration / step_delay;            // Total number of animation steps
+
     float diff = to - from;
-    float tmp_brightness;
+    float tmp_brightness = 0.0f;
+    uint8_t last_applied = 255;                                 // Keeps track of last value sent to avoid redundant updates
 
-    for (int i = 0; i <= steps; i++)
-    {
-        float t = (float)i / steps;                             // Normalized value from 0.0 (start) to 1.0 (end)
-        
-        //Apply cosine easing in-out - The formula (1 - cos(t * pi)) / 2 produces S-curve: flat > steep > flat
-  
+    for (int i = 0; i <= steps; i++) {
+        float t = (float)i / steps;                             // Normalized time value: 0.0 at start, 1.0 at end
+
+        /*
+         Cosine easing (ease-in-out): (1 - cos(t * π)) / 2
+            - Starts slow, accelerates in the middle, slows down again
+            - Produces a smooth S-curve transitio flat > steep > flat
+        */
         float eased = (1.0f - cosf(t * M_PI)) / 2.0f;
-        tmp_brightness = from + diff * eased;                   // Interpolate between "from" and "to" using the eased value
-        apply_brightness((uint8_t)(tmp_brightness + 0.5f));     // Apply the calculated brightness, rounding to the nearest whole number
+
+        tmp_brightness = from + diff * eased;                   // Interpolate the brightness using eased values
+
+        uint8_t rounded = (uint8_t)(tmp_brightness + 0.5f);     // Convert float brightness to nearest integer
+
+        // Only apply brightness if it actually changed - avoids redundant LED updates
+        if (rounded != last_applied) {
+            apply_brightness(rounded);
+            last_applied = rounded;
+        }
+
+        // Delay between brightness steps
         k_msleep(step_delay);
     }
     apply_brightness(to);                                       // Ensure the final brightness is applied to the end value
