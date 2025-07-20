@@ -26,8 +26,8 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #endif
 
 #define BRIGHTNESS_STEP 1
-#define BRIGHTNESS_DELAY_MS 50
-#define BRIGHTNESS_FADE_DURATION_MS 5000
+#define BRIGHTNESS_DELAY_MS 10
+#define BRIGHTNESS_FADE_DURATION_MS 2000
 #define SCREEN_IDLE_TIMEOUT_MS (CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S * 1000)
 
 static const struct device *pwm_leds_dev = DEVICE_DT_GET_ONE(pwm_leds);
@@ -42,7 +42,7 @@ static int8_t current_brightness = CONFIG_DONGLE_SCREEN_MAX_BRIGHTNESS;
 static uint8_t ambient_min_brightness = CONFIG_DONGLE_SCREEN_AMBIENT_LIGHT_MIN_BRIGHTNESS;
 #endif
 
-#ifndef M_PI // no M_Pi in math.h
+#ifndef M_PI //No M_Pi in math.h
     #define M_PI 3.14159265358979323846
 #endif
 
