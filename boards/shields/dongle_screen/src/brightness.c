@@ -38,9 +38,9 @@ static uint8_t max_brightness = CONFIG_DONGLE_SCREEN_MAX_BRIGHTNESS;
 static uint8_t min_brightness = CONFIG_DONGLE_SCREEN_MIN_BRIGHTNESS;
 static int8_t current_brightness = CONFIG_DONGLE_SCREEN_MAX_BRIGHTNESS;
 
-#if IS_ENABLED(CONFIG_DONGLE_SCREEN_AMBIENT_LIGHT)
+//#if IS_ENABLED(CONFIG_DONGLE_SCREEN_AMBIENT_LIGHT)
 static uint8_t ambient_min_brightness = CONFIG_DONGLE_SCREEN_AMBIENT_LIGHT_MIN_BRIGHTNESS;
-#endif
+//#endif
 
 #ifndef M_PI //No M_Pi in math.h
     #define M_PI 3.14159265358979323846
@@ -112,7 +112,7 @@ static void fade_to_brightness(uint8_t from, uint8_t to)
         if (rounded != last_applied) {
             apply_brightness(rounded);
             last_applied = rounded;
-        }
+        } 
         k_msleep(step_delay);
     }
     apply_brightness(to);                                       // Ensure the final brightness is applied to the end value
