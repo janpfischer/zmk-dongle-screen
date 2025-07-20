@@ -68,8 +68,6 @@ static void apply_brightness(uint8_t value)
     LOG_INF("Screen brightness set to %d", value);
 }
 
-
-// Start slow, faster middle, end slow
 static void fade_to_brightness(uint8_t from, uint8_t to)
 {
     if (from == to)
@@ -78,23 +76,13 @@ static void fade_to_brightness(uint8_t from, uint8_t to)
         return;
     }
 
-    //Maybe this is part redundant
-    /*
-    // If change is only 2 steps, skip easing
-    if (abs(to - from) <= 2) {
-        k_msleep(BRIGHTNESS_DELAY_MS);
-        apply_brightness(to);
-        return;
-    }
-    */
-
     const int step_delay = BRIGHTNESS_DELAY_MS;
-    const int abs_diff = abs(to - from);                  // Total number of brightness steps in the fade
+    const int abs_diff = abs(to - from);                        // Total number of brightness steps in the fade
 
     /*
     Adjust the duration of the fade depending on how small the change is:
         - Small changes -> longer fade
-        - For larger -> cap to avoid long transitions
+        - For larger changes -> cap to avoid long transitions
     */
     int dynamic_duration = abs_diff < 4 ? 1000 : BRIGHTNESS_FADE_DURATION_MS;
 
@@ -106,7 +94,7 @@ static void fade_to_brightness(uint8_t from, uint8_t to)
 
     float diff = to - from;
     float tmp_brightness = 0.0f;
-    uint8_t last_applied = 255;                                 // Keeps track of last value sent to avoid redundant updates
+    uint8_t last_applied = 255;                                 // Keeps track of last value sent to avoid redundant updates. 225, first "rounded != last_applied" will always true
 
     for (int i = 0; i <= steps; i++) {
         float t = (float)i / steps;                             // Normalized time value: 0.0 at start, 1.0 at end
@@ -117,9 +105,7 @@ static void fade_to_brightness(uint8_t from, uint8_t to)
             - Produces a smooth S-curve transitio flat > steep > flat
         */
         float eased = (1.0f - cosf(t * M_PI)) / 2.0f;
-
         tmp_brightness = from + diff * eased;                   // Interpolate the brightness using eased values
-
         uint8_t rounded = (uint8_t)(tmp_brightness + 0.5f);     // Convert float brightness to nearest integer
 
         // Only apply brightness if it actually changed - avoids redundant LED updates
@@ -127,8 +113,6 @@ static void fade_to_brightness(uint8_t from, uint8_t to)
             apply_brightness(rounded);
             last_applied = rounded;
         }
-
-        // Delay between brightness steps
         k_msleep(step_delay);
     }
     apply_brightness(to);                                       // Ensure the final brightness is applied to the end value
