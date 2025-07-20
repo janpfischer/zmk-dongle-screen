@@ -42,6 +42,10 @@ static int8_t current_brightness = CONFIG_DONGLE_SCREEN_MAX_BRIGHTNESS;
 static uint8_t ambient_min_brightness = CONFIG_DONGLE_SCREEN_AMBIENT_LIGHT_MIN_BRIGHTNESS;
 #endif
 
+#ifndef M_PI // no M_Pi in math.h
+    #define M_PI 3.14159265358979323846
+#endif
+
 static int8_t brightness_modifier = 0;
 
 static uint8_t clamp_brightness(int8_t value)
