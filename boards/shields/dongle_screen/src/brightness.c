@@ -64,38 +64,46 @@ static void apply_brightness(uint8_t value)
     LOG_INF("Screen brightness set to %d", value);
 }
 
+
+// Start slow, faster middle, end slow
 static void fade_to_brightness(uint8_t from, uint8_t to)
 {
-    if (from == to) {
+    if (from == to)
+    {
         apply_brightness(to);
         return;
     }
 
-    int steps = abs(to - from);
-    float base_delay = BRIGHTNESS_DELAY_MS * 3.0f; // Starting delay (slower)
-    float decay_rate = 3.0f / steps; // Controls how fast it speeds up
-
-    if (from < to) {
-        for (int i = 0; i <= steps; i++) {
-            uint8_t b = from + i;
-            apply_brightness(b);
-
-            float factor = (float)i / steps;
-            int delay = (int)(base_delay * expf(-decay_rate * i));
-            k_msleep(delay > 1 ? delay : 1); // minimum 1 ms delay
-        }
-    } else {
-        for (int i = 0; i <= steps; i++) {
-            uint8_t b = from - i;
-            apply_brightness(b);
-
-            float factor = (float)i / steps;
-            int delay = (int)(base_delay * expf(-decay_rate * i));
-            k_msleep(delay > 1 ? delay : 1);
-        }
+    //Maybe this is part redundant
+    /*
+    // If change is only 2 steps, skip easing
+    if (abs(to - from) <= 2) {
+        k_msleep(BRIGHTNESS_DELAY_MS);
+        apply_brightness(to);
+        return;
     }
+    */
 
-    apply_brightness(to); // Ensure final value
+    const int duration = BRIGHTNESS_FADE_DURATION_MS;         
+    const int step_delay = BRIGHTNESS_DELAY_MS;
+    const int steps = duration / step_delay;                    // Total number of steps in the fade
+
+    // Calculate the total brightness difference to interpolate
+    float diff = to - from;
+    float tmp_brightness;
+
+    for (int i = 0; i <= steps; i++)
+    {
+        float t = (float)i / steps;                             // Normalized value from 0.0 (start) to 1.0 (end)
+        
+        //Apply cosine easing in-out - The formula (1 - cos(t * pi)) / 2 produces S-curve: flat > steep > flat
+  
+        float eased = (1.0f - cosf(t * M_PI)) / 2.0f;
+        tmp_brightness = from + diff * eased;                   // Interpolate between "from" and "to" using the eased value
+        apply_brightness((uint8_t)(tmp_brightness + 0.5f));     // Apply the calculated brightness, rounding to the nearest whole number
+        k_msleep(step_delay);
+    }
+    apply_brightness(to);                                       // Ensure the final brightness is applied to the end value
 }
 
 /*
