@@ -118,6 +118,12 @@ config DONGLE_SCREEN_BRIGHTNESS_DOWN_KEYCODE
     help
       Keycode that decreases the screen brightness (default: F24).
 
+config DONGLE_SCREEN_TOGGLE_KEYCODE
+    int "Keycode for toggle screen off/on"
+    default 113  # KC_F22
+    help
+      Keycode that toggles the screen off and on (default: F22).
+
 config DONGLE_SCREEN_BRIGHTNESS_STEP
     int "Step for brightness adjustment with keyboard"
     default 10
