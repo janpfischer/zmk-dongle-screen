@@ -43,10 +43,10 @@ static lv_color_t battery_image_buffer[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOUR
 
 static void draw_battery(lv_obj_t *canvas, uint8_t level, bool usb_present) {
     
-    if (level < 1)
+    if (level < CONFIG_DONGLE_SCREEN_BATTERY_RED_LEVEL)
     {
         lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_RED), LV_OPA_COVER);
-    } else if (level <= 10) {
+    } else if (level <= CONFIG_DONGLE_SCREEN_BATTERY_RED_LEVEL) {
         lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_YELLOW), LV_OPA_COVER);
     } else {
         lv_canvas_fill_bg(canvas, lv_color_white(), LV_OPA_COVER);
