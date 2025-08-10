@@ -92,11 +92,11 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
         lv_label_set_text(label, "X");
     }
 
-    if (state.level < 1)
+    if (state.level < CONFIG_DONGLE_SCREEN_BATTERY_RED_LEVEL)
     {
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_label_set_text(label, "X");
-    } else if (state.level <= 10) {
+    } else if (state.level <= CONFIG_DONGLE_SCREEN_BATTERY_YELLOW_LEVEL) {
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_YELLOW), 0);
         lv_label_set_text_fmt(label, "%4u", state.level);
     } else {
