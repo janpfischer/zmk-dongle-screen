@@ -153,18 +153,18 @@ config DONGLE_SCREEN_BATTERY_ACTIVE
     default y
     help
       If the Battery Widget should be active or not
-endif
 
 config DONGLE_SCREEN_BATTERY_RED_LEVEL
     int "Battery Widget become red when the level is reached"
-    default 5
+    default 3
+    range 0 99
     help
       Battery Widget become red when the level is reached
-endif
 
 config DONGLE_SCREEN_BATTERY_YELLOW_LEVEL
     int "Battery Widget become yellow when the level is reached"
-    default 15
+    default 10
+    range 0 99
     help
       Battery Widget become yellow when the level is reached
 endif
