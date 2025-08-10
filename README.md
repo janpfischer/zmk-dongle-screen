@@ -40,7 +40,7 @@ This module provides several widgets to visualize the current state of your ZMK-
   Displays the current words per minute (WPM) typing speed in real time.
 
 - **Battery Widget**  
-  Shows the battery level of the dongle and/or the keyboard, if supported.
+  Shows the battery level of the dongle and/or the keyboard, if supported. Change widget color, depending on battery level.
 
 ## General Features
 
@@ -157,7 +157,7 @@ include:
 ## Configuration Options
 
 | Name                                        | Type | Default | Description                                                                                                                                                      |
-| ------------------------------------------- | ---- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|---------------------------------------------|------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `DONGLE_SCREEN_HORIZONTAL`                  | bool | y       | Orientation of the screen. By default, it is horizontal (laying on the side).                                                                                    |
 | `DONGLE_SCREEN_FLIPPED`                     | bool | n       | Should the screen orientation be flipped in horizontal or vertical orientation?                                                                                  |
 | `DONGLE_SCREEN_IDLE_TIMEOUT_S`              | int  | 600     | Screen idle timeout in seconds (0 = never off). Time in seconds after which the screen turns off when idle.                                                      |
@@ -172,6 +172,8 @@ include:
 | `DONGLE_SCREEN_LAYER_ACTIVE`                | bool | y       | If the Layer Widget should be active or not.                                                                                                                     |
 | `DONGLE_SCREEN_OUTPUT_ACTIVE`               | bool | y       | If the Output Widget should be active or not.                                                                                                                    |
 | `DONGLE_SCREEN_BATTERY_ACTIVE`              | bool | y       | If the Battery Widget should be active or not.                                                                                                                   |
+| `DONGLE_SCREEN_BATTERY_RED_LEVEL`           | int  | 3       | Battery Widget become red when the level is reaching (1-100), must be lower than yellow level                                                                    |
+| `DONGLE_SCREEN_BATTERY_YELLOW_LEVEL`        | int  | 10      | Battery Widget become yellow when the level is reaching (1-100), must be greater than red level                                                                  |
 
 ## Example Configuration (`prj.conf`)
 
