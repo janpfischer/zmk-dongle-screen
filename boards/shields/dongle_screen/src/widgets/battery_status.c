@@ -43,7 +43,7 @@ static lv_color_t battery_image_buffer[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOUR
 
 static void draw_battery(lv_obj_t *canvas, uint8_t level, bool usb_present) {
     
-    if (level < CONFIG_DONGLE_SCREEN_BATTERY_RED_LEVEL)
+    if (level <= CONFIG_DONGLE_SCREEN_BATTERY_RED_LEVEL)
     {
         lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_RED), LV_OPA_COVER);
     } else if (level <= CONFIG_DONGLE_SCREEN_BATTERY_YELLOW_LEVEL) {
@@ -92,7 +92,7 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
         lv_label_set_text(label, "X");
     }
 
-    if (state.level < CONFIG_DONGLE_SCREEN_BATTERY_RED_LEVEL)
+    if (state.level <= CONFIG_DONGLE_SCREEN_BATTERY_RED_LEVEL)
     {
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_label_set_text(label, "X");
