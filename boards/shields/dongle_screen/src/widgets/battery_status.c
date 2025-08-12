@@ -46,7 +46,9 @@ static void draw_battery(lv_obj_t *canvas, uint8_t level, bool usb_present) {
     if (level < 1)
     {
         lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_RED), LV_OPA_COVER);
-    } else if (level <= 10) {
+    } else if (level <= CONFIG_DONGLE_SCREEN_BATTERY_RED_LEVEL) {
+        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_RED), LV_OPA_COVER);
+    } else if (level <= CONFIG_DONGLE_SCREEN_BATTERY_YELLOW_LEVEL) {
         lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_YELLOW), LV_OPA_COVER);
     } else {
         lv_canvas_fill_bg(canvas, lv_color_white(), LV_OPA_COVER);
@@ -96,7 +98,10 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
     {
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_label_set_text(label, "X");
-    } else if (state.level <= 10) {
+    } else if (state.level <= CONFIG_DONGLE_SCREEN_BATTERY_RED_LEVEL) {
+        lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
+        lv_label_set_text_fmt(label, "%4u", state.level);
+    } else if (state.level <= CONFIG_DONGLE_SCREEN_BATTERY_YELLOW_LEVEL) {
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_YELLOW), 0);
         lv_label_set_text_fmt(label, "%4u", state.level);
     } else {
