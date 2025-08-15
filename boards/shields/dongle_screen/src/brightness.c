@@ -370,7 +370,26 @@ void screen_idle_thread(void)
 
 K_THREAD_DEFINE(screen_idle_tid, 512, screen_idle_thread, NULL, NULL, NULL, 7, 0, 0);
 
-#endif // CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S > 0
+void brightness_wake_screen_on_reconnect(void)
+{
+    if (!screen_on)
+    {
+        LOG_INF("Peripheral reconnected, waking screen");
+
+        screen_set_on(true);
+
+        // Reset idle timer
+        last_activity = k_uptime_get();
+
+        k_wakeup(screen_idle_tid);
+    }
+    else
+    {
+        LOG_DBG("Peripheral reconnected but screen already on");
+    }
+}
+
+#endif
 
 // --- Brightness control via keyboard ---
 
