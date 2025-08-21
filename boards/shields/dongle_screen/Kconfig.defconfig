@@ -100,6 +100,15 @@ config DONGLE_SCREEN_MIN_BRIGHTNESS
     help
         Minimum screen brightness (1-99). This is the brightness used as a minimum value for brightness adjustments with the modifier keys and the ambient light sensor. 
 
+config DONGLE_SCREEN_DEFAULT_BRIGHTNESS
+    int "Default screen brightness (0-100)"
+    default DONGLE_SCREEN_MAX_BRIGHTNESS
+    range DONGLE_SCREEN_MIN_BRIGHTNESS DONGLE_SCREEN_MAX_BRIGHTNESS
+    help
+      The initial brightness level for the screen backlight.
+      This value is used at startup and when the screen is turned on. 
+      It is defaulted to the maximum brightness but can be overridden.
+
 config DONGLE_SCREEN_BRIGHTNESS_KEYBOARD_CONTROL
     bool "Control screen brightness via keyboard"
     default y
