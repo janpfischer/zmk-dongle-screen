@@ -12,6 +12,11 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #error "DONGLE_SCREEN_MIN_BRIGHTNESS must be less than or equal to DONGLE_SCREEN_MAX_BRIGHTNESS!"
 #endif
 
+#if CONFIG_DONGLE_SCREEN_DEFAULT_BRIGHTNESS < CONFIG_DONGLE_SCREEN_MIN_BRIGHTNESS || \
+    CONFIG_DONGLE_SCREEN_DEFAULT_BRIGHTNESS > CONFIG_DONGLE_SCREEN_MAX_BRIGHTNESS
+#error "DONGLE_SCREEN_DEFAULT_BRIGHTNESS must be between MIN and MAX brightness values!"
+#endif
+
 #define BRIGHTNESS_STEP 2
 #define BRIGHTNESS_DELAY_MS 10
 #define SCREEN_IDLE_TIMEOUT_MS (CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S * 1000)
@@ -22,7 +27,7 @@ static const struct device *pwm_leds_dev = DEVICE_DT_GET_ONE(pwm_leds);
 static int64_t last_activity = 0;
 static uint8_t max_brightness = CONFIG_DONGLE_SCREEN_MAX_BRIGHTNESS;
 static uint8_t min_brightness = CONFIG_DONGLE_SCREEN_MIN_BRIGHTNESS;
-static uint8_t user_brightness = CONFIG_DONGLE_SCREEN_MAX_BRIGHTNESS;
+static uint8_t user_brightness = CONFIG_DONGLE_SCREEN_DEFAULT_BRIGHTNESS;
 
 static uint8_t clamp_brightness(uint8_t value)
 {

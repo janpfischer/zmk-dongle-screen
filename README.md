@@ -156,22 +156,23 @@ include:
 
 ## Configuration Options
 
-| Name                                        | Type | Default | Description                                                                                                                                                      |
-| ------------------------------------------- | ---- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DONGLE_SCREEN_HORIZONTAL`                  | bool | y       | Orientation of the screen. By default, it is horizontal (laying on the side).                                                                                    |
-| `DONGLE_SCREEN_FLIPPED`                     | bool | n       | Should the screen orientation be flipped in horizontal or vertical orientation?                                                                                  |
-| `DONGLE_SCREEN_IDLE_TIMEOUT_S`              | int  | 600     | Screen idle timeout in seconds (0 = never off). Time in seconds after which the screen turns off when idle.                                                      |
-| `DONGLE_SCREEN_MAX_BRIGHTNESS`              | int  | 80      | Maximum screen brightness (1-100). This is the brightness used when the dongle is powered on and the maximum used by the dimmer.                                 |
-| `DONGLE_SCREEN_MIN_BRIGHTNESS`              | int  | 0       | Minimum screen brightness (0-99, 0 = off). This is also the brightness used by the automatic dimmer. If greater than 0, the screen will not turn off completely. |
-| `DONGLE_SCREEN_BRIGHTNESS_KEYBOARD_CONTROL` | bool | y       | Allows controlling the screen brightness via keyboard (e.g., F23/F24).                                                                                           |
-| `DONGLE_SCREEN_BRIGHTNESS_UP_KEYCODE`       | int  | 115     | Keycode for increasing screen brightness (default: F24).                                                                                                         |
-| `DONGLE_SCREEN_BRIGHTNESS_DOWN_KEYCODE`     | int  | 114     | Keycode for decreasing screen brightness (default: F23).                                                                                                         |
-| `DONGLE_SCREEN_BRIGHTNESS_STEP`             | int  | 10      | Step for brightness adjustment with keyboard. How much brightness (range MIN_BRIGHTNESS to MAX_BRIGHTNESS) should be applied per keystroke.                      |
-| `DONGLE_SCREEN_WPM_ACTIVE`                  | bool | y       | If the WPM Widget should be active or not.                                                                                                                       |
-| `DONGLE_SCREEN_MODIFIER_ACTIVE`             | bool | y       | If the Modifier Widget should be active or not.                                                                                                                  |
-| `DONGLE_SCREEN_LAYER_ACTIVE`                | bool | y       | If the Layer Widget should be active or not.                                                                                                                     |
-| `DONGLE_SCREEN_OUTPUT_ACTIVE`               | bool | y       | If the Output Widget should be active or not.                                                                                                                    |
-| `DONGLE_SCREEN_BATTERY_ACTIVE`              | bool | y       | If the Battery Widget should be active or not.                                                                                                                   |
+| Name                                        | Type | Default                        | Description                                                                                                                                                                                                                        |
+| ------------------------------------------- | ---- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DONGLE_SCREEN_HORIZONTAL`                  | bool | y                              | Orientation of the screen. By default, it is horizontal (laying on the side).                                                                                                                                                      |
+| `DONGLE_SCREEN_FLIPPED`                     | bool | n                              | Should the screen orientation be flipped in horizontal or vertical orientation?                                                                                                                                                    |
+| `DONGLE_SCREEN_IDLE_TIMEOUT_S`              | int  | 600                            | Screen idle timeout in seconds (0 = never off). Time in seconds after which the screen turns off when idle.                                                                                                                        |
+| `DONGLE_SCREEN_MAX_BRIGHTNESS`              | int  | 70                             | Maximum screen brightness (1-100). This is the brightness used when the dongle is powered on and the maximum used by the dimmer.                                                                                                   |
+| `DONGLE_SCREEN_MIN_BRIGHTNESS`              | int  | 0                              | Minimum screen brightness (0-99, 0 = off). This is also the brightness used by the automatic dimmer. If greater than 0, the screen will not turn off completely.                                                                   |
+| `DONGLE_SCREEN_DEFAULT_BRIGHTNESS`          | int  | `DONGLE_SCREEN_MAX_BRIGHTNESS` | The initial brightness level for the screen backlight. This value is used at startup and when the screen is turned on. It is defaulted to the MAX brightness but can be overridden. Must be between MIN and MAX brightness values. |
+| `DONGLE_SCREEN_BRIGHTNESS_KEYBOARD_CONTROL` | bool | y                              | Allows controlling the screen brightness via keyboard (e.g., F23/F24).                                                                                                                                                             |
+| `DONGLE_SCREEN_BRIGHTNESS_UP_KEYCODE`       | int  | 115                            | Keycode for increasing screen brightness (default: F24).                                                                                                                                                                           |
+| `DONGLE_SCREEN_BRIGHTNESS_DOWN_KEYCODE`     | int  | 114                            | Keycode for decreasing screen brightness (default: F23).                                                                                                                                                                           |
+| `DONGLE_SCREEN_BRIGHTNESS_STEP`             | int  | 10                             | Step for brightness adjustment with keyboard. How much brightness (range MIN_BRIGHTNESS to MAX_BRIGHTNESS) should be applied per keystroke.                                                                                        |
+| `DONGLE_SCREEN_WPM_ACTIVE`                  | bool | y                              | If the WPM Widget should be active or not.                                                                                                                                                                                         |
+| `DONGLE_SCREEN_MODIFIER_ACTIVE`             | bool | y                              | If the Modifier Widget should be active or not.                                                                                                                                                                                    |
+| `DONGLE_SCREEN_LAYER_ACTIVE`                | bool | y                              | If the Layer Widget should be active or not.                                                                                                                                                                                       |
+| `DONGLE_SCREEN_OUTPUT_ACTIVE`               | bool | y                              | If the Output Widget should be active or not.                                                                                                                                                                                      |
+| `DONGLE_SCREEN_BATTERY_ACTIVE`              | bool | y                              | If the Battery Widget should be active or not.                                                                                                                                                                                     |
 
 ## Example Configuration (`prj.conf`)
 
@@ -179,8 +180,9 @@ include:
 CONFIG_DONGLE_SCREEN_HORIZONTAL=y
 CONFIG_DONGLE_SCREEN_FLIPPED=n
 CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S=300
-CONFIG_DONGLE_SCREEN_MAX_BRIGHTNESS=90
+CONFIG_DONGLE_SCREEN_MAX_BRIGHTNESS=40
 CONFIG_DONGLE_SCREEN_MIN_BRIGHTNESS=10
+CONFIG_DONGLE_SCREEN_DEFAULT_BRIGHTNESS=30
 CONFIG_DONGLE_SCREEN_BRIGHTNESS_KEYBOARD_CONTROL=y
 CONFIG_DONGLE_SCREEN_BRIGHTNESS_UP_KEYCODE=115
 CONFIG_DONGLE_SCREEN_BRIGHTNESS_DOWN_KEYCODE=114
