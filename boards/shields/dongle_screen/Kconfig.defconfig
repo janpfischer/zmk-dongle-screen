@@ -94,11 +94,11 @@ config DONGLE_SCREEN_MAX_BRIGHTNESS
         This is the brightness which is used when the dongle is powered on. This is also the maximum brightness used by the dimmer.
 
 config DONGLE_SCREEN_MIN_BRIGHTNESS
-    int "Minimum screen brightness (0-99, 0 = off)"
-    default 0
-    range 0 99
+    int "Minimum screen brightness (1-99)"
+    default 1
+    range 1 99
     help
-        This is also the brightness which is used by the automatic dimmer. If greater than 0 the screen would not turn off completly.
+        Minimum screen brightness (1-99). This is the brightness used as a minimum value for brightness adjustments with the modifier keys and the ambient light sensor. 
 
 config DONGLE_SCREEN_DEFAULT_BRIGHTNESS
     int "Default screen brightness (0-100)"
@@ -126,6 +126,12 @@ config DONGLE_SCREEN_BRIGHTNESS_DOWN_KEYCODE
     default 114  # KC_F23
     help
       Keycode that decreases the screen brightness (default: F24).
+
+config DONGLE_SCREEN_TOGGLE_KEYCODE
+    int "Keycode for toggle screen off/on"
+    default 113  # KC_F22
+    help
+      Keycode that toggles the screen off and on (default: F22).
 
 config DONGLE_SCREEN_BRIGHTNESS_STEP
     int "Step for brightness adjustment with keyboard"
@@ -162,4 +168,46 @@ config DONGLE_SCREEN_BATTERY_ACTIVE
     default y
     help
       If the Battery Widget should be active or not
+
+config DONGLE_SCREEN_AMBIENT_LIGHT
+    bool "Enable automatic brightness via ambient light sensor"
+    default n
+    select SENSOR
+    select APDS9960
+    help
+      If enabled, the ambient light sensor will be used to automatically adjust screen brightness.
+
+config DONGLE_SCREEN_AMBIENT_LIGHT_TEST
+    bool "Enable automatic brightness testing"
+    default n
+    help
+      If enabled, the ambient light sensor will be mocked to adjust screen brightness.
+
+config DONGLE_SCREEN_AMBIENT_LIGHT_EVALUATION_INTERVAL_MS
+    int "The interval for ambient light evaluation (in milliseconds)"
+    default 1000
+    help
+      The interval how often the ambient light level should be evaluated.
+
+config DONGLE_SCREEN_AMBIENT_LIGHT_MIN_RAW_VALUE
+    int "The minimum raw value for until your ambient sensor repects readings."
+    default 0
+    range 0 1999
+    help
+      Depending on the position and if the sensor is behind transparent plastic or not the sensor readings can be vary. Behind plastic the default value is proven good. If your ambient light changes are not too reactive you might change this.
+
+config DONGLE_SCREEN_AMBIENT_LIGHT_MAX_RAW_VALUE
+    int "The maximum raw value for until your ambient sensor repects readings."
+    default 100
+    range 100 3000
+    help
+      Depending on the position and if the sensor is behind transparent plastic or not the sensor readings can be vary. Behind plastic the default value is proven good. If your ambient light changes are not too reactive you might change this.
+
+config DONGLE_SCREEN_BRIGHTNESS_MODIFIER
+    int "The modifier to start the application with."
+    default 0
+    range -99 99
+    help
+      The modifier to start the dongle with. Useful if you found a modifier comfortable for you. Espacially for ambient light. Otherwise no need to change.
+
 endif
