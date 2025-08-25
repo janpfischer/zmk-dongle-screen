@@ -193,6 +193,7 @@ include:
 | `CONFIG_DONGLE_SCREEN_OUTPUT_ACTIVE`                           | bool | y       | If the Output Widget should be active or not.                                                                                                                    |
 | `CONFIG_DONGLE_SCREEN_BATTERY_ACTIVE`                          | bool | y       | If the Battery Widget should be active or not.                                                                                                                   |
 | `CONFIG_DONGLE_SCREEN_AMBIENT_LIGHT_TEST`                      | bool | n       | If enabled, the ambient light sensor will be mocked to adjust screen brightness.                                                                                 |
+| `CONFIG_DONGLE_SCREEN_SYSTEM_ICON`                             | int  | 0       | The icon to display when the 'LGUI'/'RGUI' is pressed. (0: macOS, 1: Linux, 2: Windows)                                                                          |
 
 ## Example Configuration (`prj.conf`)
 

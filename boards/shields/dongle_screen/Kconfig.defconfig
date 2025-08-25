@@ -200,5 +200,11 @@ config DONGLE_SCREEN_BRIGHTNESS_MODIFIER
     range -99 99
     help
       The modifier to start the dongle with. Useful if you found a modifier comfortable for you. Espacially for ambient light. Otherwise no need to change.
-
+config DONGLE_SCREEN_SYSTEM_ICON
+    int "The icon to display when the 'LGUI'/'RGUI' is pressed. (0: macOS, 1: Linux, 2: Windows)"
+    default 0
+    range 0 2
+    help
+        The icon to display when the 'LGUI'/'RGUI' is pressed. Can be used to better match the Mod Widget to the underlying system.
+        (0: macOS, 1: Linux, 2: Windows)
 endif
