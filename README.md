@@ -19,6 +19,7 @@ https://github.com/user-attachments/assets/3379f79c-af90-4763-8ba5-8a8f34fd66cf
 ## Building a dongle
 
 To build a dongle yourself you can use the build guide by **carrefinho** ([prospector project](https://github.com/carrefinho/prospector)).  
+nice!nano v2 supported. [Wiring guide](/docs/nice_nano_wire_guide.md).  
 This repository only contains a module and no build guides or suggestions.
 
 ## Widgets Overview
