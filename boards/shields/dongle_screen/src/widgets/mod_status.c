@@ -24,7 +24,14 @@ static void update_mod_status(struct zmk_widget_mod_status *widget)
     if (mods & (MOD_LALT | MOD_RALT))
         syms[n++] = "󰘵"; // U+F0635
     if (mods & (MOD_LGUI | MOD_RGUI))
+    // set next syms according to CONFIG_DONGLE_SCREEN_SYSTEM (0,1,2)
+#if CONFIG_DONGLE_SCREEN_SYSTEM_ICON == 1
+        syms[n++] = "󰌽"; // U+DF3D
+#elif CONFIG_DONGLE_SCREEN_SYSTEM_ICON == 2
+        syms[n++] = ""; // U+E62A
+#else
         syms[n++] = "󰘳"; // U+F0633
+#endif
 
     for (int i = 0; i < n; ++i)
     {

@@ -19,6 +19,7 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #include <zmk/usb.h>
 
 #include "battery_status.h"
+#include "../brightness.h"
 
 #if IS_ENABLED(CONFIG_ZMK_DONGLE_DISPLAY_DONGLE_BATTERY)
     #define SOURCE_OFFSET 1
@@ -40,6 +41,37 @@ struct battery_object {
 } battery_objects[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET];
     
 static lv_color_t battery_image_buffer[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET][102 * 5];
+
+// Peripheral reconnection tracking
+// ZMK sends battery events with level < 1 when peripherals disconnect
+static int8_t last_battery_levels[ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET];
+
+static void init_peripheral_tracking(void) {
+    for (int i = 0; i < (ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET); i++) {
+        last_battery_levels[i] = -1; // -1 indicates never seen before
+    }
+}
+
+static bool is_peripheral_reconnecting(uint8_t source, uint8_t new_level) {
+    if (source >= (ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET)) {
+        return false;
+    }
+    
+    int8_t previous_level = last_battery_levels[source];
+    
+    // Reconnection detected if:
+    // 1. Previous level was < 1 (disconnected/unknown) AND
+    // 2. New level is >= 1 (valid battery level)
+    bool reconnecting = (previous_level < 1) && (new_level >= 1);
+    
+    if (reconnecting) {
+        LOG_INF("Peripheral %d reconnection: %d%% -> %d%% (was %s)", 
+                source, previous_level, new_level, 
+                previous_level == -1 ? "never seen" : "disconnected");
+    }
+    
+    return reconnecting;
+}
 
 static void draw_battery(lv_obj_t *canvas, uint8_t level, bool usb_present) {
     
@@ -78,6 +110,27 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
     if (state.source >= ZMK_SPLIT_CENTRAL_PERIPHERAL_COUNT + SOURCE_OFFSET) {
         return;
     }
+    
+    // Check for reconnection using the existing battery level mechanism
+    bool reconnecting = is_peripheral_reconnecting(state.source, state.level);
+    
+    // Update our tracking
+    last_battery_levels[state.source] = state.level;
+
+
+    // Wake screen on reconnection
+    if (reconnecting) {
+#if CONFIG_DONGLE_SCREEN_IDLE_TIMEOUT_S > 0    
+        LOG_INF("Peripheral %d reconnected (battery: %d%%), requesting screen wake", 
+                state.source, state.level);
+        brightness_wake_screen_on_reconnect();
+#else 
+        LOG_INF("Peripheral %d reconnected (battery: %d%%)", 
+                state.source, state.level);
+#endif
+    }
+
+
     LOG_DBG("source: %d, level: %d, usb: %d", state.source, state.level, state.usb_present);
     lv_obj_t *symbol = battery_objects[state.source].symbol;
     lv_obj_t *label = battery_objects[state.source].label;
@@ -184,6 +237,9 @@ int zmk_widget_dongle_battery_status_init(struct zmk_widget_dongle_battery_statu
     }
 
     sys_slist_append(&widgets, &widget->node);
+
+    // Initialize peripheral tracking
+    init_peripheral_tracking();
 
     widget_dongle_battery_status_init();
 
