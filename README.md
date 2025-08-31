@@ -83,7 +83,7 @@ This module provides several widgets to visualize the current state of your ZMK-
 ## Installation
 
 **ZMK version compatability**
-YADS needs at least ZMK version `0.3.0` or revision `147c340c6e8d377304acfdd64dc86cf83ebdfef2` to be build. 
+YADS needs at least ZMK version `0.3.0` or `main` (if newer than `0.3.0`) to be build. 
 
 1. This guide assumes that you have already implemented a basic dongle setup as described [here](https://zmk.dev/docs/development/hardware-integration/dongle).
 2. Once this is done, add this repository to your `west.yaml`.  
@@ -99,7 +99,7 @@ YADS needs at least ZMK version `0.3.0` or revision `147c340c6e8d377304acfdd64dc
      projects:
        - name: zmk
          remote: zmkfirmware
-         revision: main #or at least 147c340c6e8d377304acfdd64dc86cf83ebdfef2 or 0.3.0
+         revision: 0.3.0 # or main if newer than 0.3.0
          import: app/west.yml
        - name: zmk-dongle-screen
          remote: janpfischer
