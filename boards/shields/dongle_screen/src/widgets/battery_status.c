@@ -80,10 +80,13 @@ static void draw_battery(lv_obj_t *canvas, uint8_t level, bool usb_present) {
         lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_RED), LV_OPA_COVER);
     } else if (level <= 10) {
         lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_YELLOW), LV_OPA_COVER);
+    } else if (level <= 50) {
+        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_BLUE), LV_OPA_COVER);
+    } else if (level <= 90) {
+        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_CYAN), LV_OPA_COVER);
     } else {
-        lv_canvas_fill_bg(canvas, lv_color_white(), LV_OPA_COVER);
+        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_GREEN), LV_OPA_COVER);
     }
-
     
     lv_draw_rect_dsc_t rect_fill_dsc;
     lv_draw_rect_dsc_init(&rect_fill_dsc);
@@ -145,15 +148,20 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
         lv_label_set_text(label, "X");
     }
 
-    if (state.level < 1)
-    {
+    if (state.level < 1) {
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_label_set_text(label, "X");
     } else if (state.level <= 10) {
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_YELLOW), 0);
         lv_label_set_text_fmt(label, "%4u", state.level);
+    } else if (state.level <= 50) {
+        lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_BLUE), 0);
+        lv_label_set_text_fmt(label, "%4u", state.level);
+    } else if (state.level <= 90) {
+        lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_CYAN), 0);
+        lv_label_set_text_fmt(label, "%4u", state.level);
     } else {
-        lv_obj_set_style_text_color(label, lv_color_white(), 0);
+        lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_GREEN), 0);
         lv_label_set_text_fmt(label, "%4u", state.level);
     }
     
