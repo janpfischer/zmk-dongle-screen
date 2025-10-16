@@ -9,6 +9,9 @@
 #include <lvgl.h>
 #include <zephyr/kernel.h>
 
+#define LV_FONT_MONTSERRAT_10 1
+
+
 // output_status.h
 struct zmk_widget_output_status {
     sys_snode_t node;
