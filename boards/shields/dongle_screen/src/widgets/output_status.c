@@ -73,10 +73,10 @@ static void set_status_symbol(struct zmk_widget_output_status *widget, struct ou
     switch (state.selected_endpoint.transport)
     {
     case ZMK_TRANSPORT_USB:
-        snprintf(transport_text, sizeof(transport_text), "> #%s USB#\n#%s BLE#", usb_color, ble_color);
+        snprintf(transport_text, sizeof(transport_text), "> #%s USB#\n#%s BLE# %d", usb_color, ble_color, state.active_profile_index + 1);
         break;
     case ZMK_TRANSPORT_BLE:
-        snprintf(transport_text, sizeof(transport_text), "#%s USB#\n> #%s BLE#", usb_color, ble_color);
+        snprintf(transport_text, sizeof(transport_text), "#%s USB#\n> #%s BLE# %d" , usb_color, ble_color, state.active_profile_index + 1);
         break;
     }
 
