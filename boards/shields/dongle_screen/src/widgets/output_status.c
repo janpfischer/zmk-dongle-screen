@@ -104,7 +104,7 @@ int zmk_widget_output_status_init(struct zmk_widget_output_status *widget, lv_ob
     lv_obj_set_style_pad_all(widget->obj, 0, 0);
 
     widget->connection_label = lv_label_create(widget->obj);
-    lv_obj_set_style_text_font(widget->connection_label, &lv_font_montserrat_40, 0);
+    lv_obj_set_style_text_font(widget->connection_label, &lv_font_montserrat_10, 0);
     lv_label_set_text(widget->connection_label, "---");
 
     sys_slist_append(&widgets, &widget->node);
