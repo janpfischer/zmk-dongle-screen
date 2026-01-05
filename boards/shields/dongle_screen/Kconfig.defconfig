@@ -26,18 +26,21 @@ choice ZMK_DISPLAY_WORK_QUEUE
     default ZMK_DISPLAY_WORK_QUEUE_DEDICATED
 endchoice
 
-config ZMK_DISPLAY_DEDICATED_THREAD_STACK_SIZE
-    default 4096
-
 choice ST7789V_PIXEL_FORMAT
 	default ST7789V_RGB565
 endchoice
 
 config LV_Z_VDB_SIZE
-    default 100
+    default 50
+
+config LV_Z_DOUBLE_VDB
+    default y
+
+config LV_Z_FLUSH_THREAD
+    default y
 
 config LV_Z_MEM_POOL_SIZE
-    default 10000
+    default 16384
 
 config LV_DPI_DEF
     default 261
@@ -51,9 +54,6 @@ endchoice
 
 config LV_COLOR_16_SWAP
 	default y
-
-config LV_DISP_DEF_REFR_PERIOD
-    default 20
 
 choice LV_FONT_DEFAULT
     default LV_FONT_DEFAULT_MONTSERRAT_20
