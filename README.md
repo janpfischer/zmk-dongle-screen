@@ -6,6 +6,13 @@ It offers various widgets for current output, displaying layer, mod, WPM, and ba
 
 **This project is inspired by [prospector-zmk-module](https://github.com/carrefinho/prospector-zmk-module) and [zmk-dongle-display](https://github.com/englmaxi/zmk-dongle-display). Thanks for your awesome work!**
 
+## Note on current ZMK main branch 
+
+As the ZMK main branch moved to Zephyr 4.1 the latest release of YADS is not compatible with that branch. 
+If you want to build the main branch of ZMK please have a look at this [issue](https://github.com/janpfischer/zmk-dongle-screen/issues/29). 
+
+In short you can use YADS already with Zephyr 4.1 if you are building with the YADS branch `upgrade-4.1`. Furthermore you'll have to adjust your `west.yaml` with the other references and change the board reference in the `build.yaml` to `xaio_ble`.
+
 ## Demo
 
 ![Sample Screen of zmk-dongle-screen](/docs/images/screen.jpg)
@@ -83,7 +90,9 @@ This module provides several widgets to visualize the current state of your ZMK-
 ## Installation
 
 **ZMK version compatability**
-YADS needs at least ZMK version `0.3.0` or `main` (if newer than `0.3.0`) to be build. 
+YADS needs ZMK version `0.3.0` to be build. 
+Currently the main branch of YADS does not support ZMK `main` branch as this was already upgraded to Zephyr 4.1. However there is already a branch which supports the new ZMK Zephyr 4.1 version and therefore the current main branch. 
+To follow the development please refer to: https://github.com/janpfischer/zmk-dongle-screen/issues/29
 
 1. This guide assumes that you have already implemented a basic dongle setup as described [here](https://zmk.dev/docs/development/hardware-integration/dongle).
 2. Once this is done, add this repository to your `west.yaml`.  
