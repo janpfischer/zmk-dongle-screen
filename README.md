@@ -273,6 +273,10 @@ west build -p -s /workspaces/zmk/app -d "/workspaces/zmk-build-output/totem_dong
 
 _Note: a matching entry for `-DSHIELD` must already be present in your `build.yaml` in your configuration, which is given as the `-DZMK_CONFIG` argument._
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=janpfischer/zmk-dongle-screen&type=date&legend=top-left)](https://www.star-history.com/#janpfischer/zmk-dongle-screen&type=date&legend=top-left)
+
 ## License
 
 MIT License
