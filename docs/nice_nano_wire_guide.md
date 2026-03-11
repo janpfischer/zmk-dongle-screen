@@ -28,6 +28,13 @@
 
 Follow README installation and replace `seeeduino_xiao_ble` with `nice_nano_v2` for step 3 in your `build.yaml`.
 
+<details>
+<summary>Note for building with ZMK main (Zephyr 4.1)</summary>
+
+Use `nice_nano@2.0.0//zmk` for step 3 in your `build.yaml`.
+
+</details>
+
 [3D print rear cap](/docs/3d_files/) modified and tested with SuperMini nRF52840.   
 - Two versions, with and without reset button.  
 - 6x6x6mm tactile button used for reset.  
