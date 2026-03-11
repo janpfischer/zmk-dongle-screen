@@ -36,7 +36,7 @@ struct output_status_state
 static struct output_status_state get_state(const zmk_event_t *_eh)
 {
     return (struct output_status_state){
-        .selected_endpoint = zmk_endpoints_selected(),                     // 0 = USB , 1 = BLE
+        .selected_endpoint = zmk_endpoint_get_selected(),                  // 0 = USB , 1 = BLE
         .active_profile_index = zmk_ble_active_profile_index(),            // 0-3 BLE profiles
         .active_profile_connected = zmk_ble_active_profile_is_connected(), // 0 = not connected, 1 = connected
         .active_profile_bonded = !zmk_ble_active_profile_is_open(),        // 0 =  BLE not bonded, 1 = bonded
