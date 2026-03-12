@@ -11,7 +11,7 @@ It offers various widgets for current output, displaying layer, mod, WPM, and ba
 As the ZMK main branch moved to Zephyr 4.1 the latest release of YADS is not compatible with that branch.
 If you want to build the main branch of ZMK please have a look at this [issue](https://github.com/janpfischer/zmk-dongle-screen/issues/29).
 
-In short you can use YADS already with Zephyr 4.1 if you are building with the YADS branch `upgrade-4.1`. Furthermore you'll have to adjust your `west.yaml` with the other references and change the board reference in the `build.yaml` to `xaio_ble` (if not using a nice!nano).
+In short you can use YADS already with Zephyr 4.1 if you are building with the YADS branch `upgrade-4.1`. Furthermore you'll have to adjust your `west.yaml` with the other references and change the board reference in the `build.yaml` to `xiao_ble//zmk` (if not using a nice!nano `nice_nano@2.0.0//zmk`).
 
 ## Demo
 
