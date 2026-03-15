@@ -1,35 +1,12 @@
-# ZMK Dongle Screen YADS (Yet another Dongle Screen)
+# ZMK Dongle Screen YADS (Yet another Dongle Screen), with color modifiers
 
 This project provides a Zephyr module for a dongle display shield based on the ST7789V display, the Seeeduino XIAO BLE (or nice!nano v2) microcontroller, and the LVGL graphics library.
-The display can take advantage of an ambient light sensor to dim and brighten automatically.
+
+**This is a fork of the wonderful YADS [zmk-dongle-screen][https://github.com/janpfischer/zmk-dongle-screen]. All credit goes there.**
+
 It offers color-coded widgets for output status, layer, modifiers, WPM, and battery — as well as keyboard-controlled brightness, idle auto-off, and a fully customizable layout.
 
-**This project is inspired by [prospector-zmk-module](https://github.com/carrefinho/prospector-zmk-module) and [zmk-dongle-display](https://github.com/englmaxi/zmk-dongle-display). Thanks for your awesome work!**
-
-## Note on current ZMK main branch
-
-As the ZMK main branch moved to Zephyr 4.1, the latest release of YADS is not compatible with that branch.
-If you want to build with the ZMK main branch please see this [issue](https://github.com/janpfischer/zmk-dongle-screen/issues/29).
-
-In short: use the YADS branch `upgrade-4.1`, adjust your `west.yaml` references accordingly, and change the board reference in `build.yaml` to `xaio_ble`.
-
-## Demo
-
-![Sample Screen of zmk-dongle-screen](/docs/images/screen.jpg)
-
-<https://github.com/user-attachments/assets/86c33af6-d83e-4e2a-9766-fc8836e896f1>
-
-### Brightness changes with ambient light sensor and screen toggle
-
-https://github.com/user-attachments/assets/3379f79c-af90-4763-8ba5-8a8f34fd66cf
-
-## Building a dongle
-
-To build a dongle yourself you can use the build guide by **carrefinho** ([prospector project](https://github.com/carrefinho/prospector)) based on the Seeed Studio XIAO nRF52840.
-
-nice!nano v2 is also supported. See the [wiring guide](/docs/nice_nano_wire_guide.md).
-
-This repository contains only a module — no build guides or case designs.
+This assumes you already know about dongles.
 
 ## Widgets Overview
 
@@ -93,7 +70,7 @@ All thresholds are configurable.
 
 ## Installation
 
-**ZMK version compatibility:** YADS requires ZMK `0.3.0`. For ZMK main (Zephyr 4.1), use the `upgrade-4.1` branch. See [issue #29](https://github.com/janpfischer/zmk-dongle-screen/issues/29).
+**ZMK version compatibility:** YADS requires ZMK `0.3.0`. I haven't done any work on anything else yet.,
 
 1. This guide assumes you have already implemented a basic dongle setup as described [here](https://zmk.dev/docs/development/hardware-integration/dongle).
 
@@ -104,26 +81,18 @@ All thresholds are configurable.
      remotes:
        - name: zmkfirmware
          url-base: https://github.com/zmkfirmware
-       - name: janpfischer
-         url-base: https://github.com/janpfischer
+       - name: albertclee
+         url-base: https://github.com/alee0729
      projects:
        - name: zmk
          remote: zmkfirmware
          revision: 0.3.0
          import: app/west.yml
        - name: zmk-dongle-screen
-         remote: janpfischer
+         remote: albertclee
          revision: main
      self:
        path: config
-   ```
-
-   To pin a specific release, set `revision` to a tag or commit SHA:
-
-   ```yaml
-   - name: zmk-dongle-screen
-     remote: janpfischer
-     revision: 0.0.1
    ```
 
 3. Add the shield to your dongle's `build.yaml`:
