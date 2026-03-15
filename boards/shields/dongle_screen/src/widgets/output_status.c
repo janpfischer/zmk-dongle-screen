@@ -45,38 +45,24 @@ static struct output_status_state get_state(const zmk_event_t *_eh)
 
 static void set_status_symbol(struct zmk_widget_output_status *widget, struct output_status_state state)
 {
-    const char *ble_color = "ffffff";
-    const char *usb_color = "ffffff";
-    char transport_text[50] = {};
-    if (state.usb_is_hid_ready == 0)
-    {
-        usb_color = "ff0000";
-    }
-    else
-    {
-        usb_color = "ffffff";
-    }
+    char usb_color[7];
+    char ble_color[7];
+    char transport_text[60] = {};
 
-    if (state.active_profile_connected == 1)
-    {
-        ble_color = "00ff00";
-    }
-    else if (state.active_profile_bonded == 1)
-    {
-        ble_color = "0000ff";
-    }
-    else
-    {
-        ble_color = "ffffff";
-    }
+    snprintf(usb_color, sizeof(usb_color), "%06x",
+        state.usb_is_hid_ready
+            ? CONFIG_DONGLE_SCREEN_USB_COLOR_CONNECTED
+            : CONFIG_DONGLE_SCREEN_USB_COLOR_DISCONNECTED);
+
+    snprintf(ble_color, sizeof(ble_color), "%06x", CONFIG_DONGLE_SCREEN_BLE_COLOR);
 
     switch (state.selected_endpoint.transport)
     {
     case ZMK_TRANSPORT_USB:
-        snprintf(transport_text, sizeof(transport_text), "> #%s USB#\n#%s BLE#", usb_color, ble_color);
+        snprintf(transport_text, sizeof(transport_text), "#%s > USB#\n#%s BLE#", usb_color, ble_color);
         break;
     case ZMK_TRANSPORT_BLE:
-        snprintf(transport_text, sizeof(transport_text), "#%s USB#\n> #%s BLE#", usb_color, ble_color);
+        snprintf(transport_text, sizeof(transport_text), "#%s USB#\n#%s > BLE#", usb_color, ble_color);
         break;
     }
 

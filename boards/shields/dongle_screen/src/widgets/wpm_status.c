@@ -32,10 +32,19 @@ static struct wpm_status_state get_state(const zmk_event_t *_eh)
 
 static void set_wpm(struct zmk_widget_wpm_status *widget, struct wpm_status_state state)
 {
-
     char wpm_text[12];
     snprintf(wpm_text, sizeof(wpm_text), "%i", state.wpm);
     lv_label_set_text(widget->wpm_label, wpm_text);
+
+    lv_color_t wpm_color;
+    if (state.wpm >= CONFIG_DONGLE_SCREEN_WPM_HIGH_THRESHOLD) {
+        wpm_color = lv_color_hex(CONFIG_DONGLE_SCREEN_WPM_COLOR_HIGH);
+    } else if (state.wpm >= CONFIG_DONGLE_SCREEN_WPM_MID_THRESHOLD) {
+        wpm_color = lv_color_hex(CONFIG_DONGLE_SCREEN_WPM_COLOR_MID);
+    } else {
+        wpm_color = lv_color_hex(CONFIG_DONGLE_SCREEN_WPM_COLOR_LOW);
+    }
+    lv_obj_set_style_text_color(widget->wpm_title_label, wpm_color, 0);
 }
 
 static void wpm_status_update_cb(struct wpm_status_state state)
@@ -57,8 +66,12 @@ int zmk_widget_wpm_status_init(struct zmk_widget_wpm_status *widget, lv_obj_t *p
     widget->obj = lv_obj_create(parent);
     lv_obj_set_size(widget->obj, 240, 77);
 
+    widget->wpm_title_label = lv_label_create(widget->obj);
+    lv_label_set_text(widget->wpm_title_label, "WPM");
+    lv_obj_align(widget->wpm_title_label, LV_ALIGN_TOP_LEFT, 0, 0);
+
     widget->wpm_label = lv_label_create(widget->obj);
-    lv_obj_align(widget->wpm_label, LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_obj_align(widget->wpm_label, LV_ALIGN_TOP_LEFT, 0, 20);
 
     // Only here as a sample
     // widget->font_test = lv_label_create(widget->obj);

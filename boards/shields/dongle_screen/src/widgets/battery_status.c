@@ -73,16 +73,16 @@ static bool is_peripheral_reconnecting(uint8_t source, uint8_t new_level) {
     return reconnecting;
 }
 
+static lv_color_t battery_level_color(uint8_t level) {
+    if (level < 1)                                              return lv_palette_main(LV_PALETTE_RED);
+    if (level >= CONFIG_DONGLE_SCREEN_BATTERY_GREEN_THRESHOLD)  return lv_palette_main(LV_PALETTE_GREEN);
+    if (level >= CONFIG_DONGLE_SCREEN_BATTERY_YELLOW_THRESHOLD) return lv_palette_main(LV_PALETTE_YELLOW);
+    if (level >= CONFIG_DONGLE_SCREEN_BATTERY_ORANGE_THRESHOLD) return lv_palette_main(LV_PALETTE_ORANGE);
+    return lv_palette_main(LV_PALETTE_RED);
+}
+
 static void draw_battery(lv_obj_t *canvas, uint8_t level, bool usb_present) {
-    
-    if (level < 1)
-    {
-        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_RED), LV_OPA_COVER);
-    } else if (level <= 10) {
-        lv_canvas_fill_bg(canvas, lv_palette_main(LV_PALETTE_YELLOW), LV_OPA_COVER);
-    } else {
-        lv_canvas_fill_bg(canvas, lv_color_white(), LV_OPA_COVER);
-    }
+    lv_canvas_fill_bg(canvas, battery_level_color(level), LV_OPA_COVER);
 
     
     lv_draw_rect_dsc_t rect_fill_dsc;
@@ -137,23 +137,11 @@ static void set_battery_symbol(lv_obj_t *widget, struct battery_state state) {
 
     draw_battery(symbol, state.level, state.usb_present);
     
-    if (state.level > 0) {
-        lv_obj_set_style_text_color(label, lv_color_white(), 0);
-        lv_label_set_text_fmt(label, "%4u", state.level);
-    } else {
+    if (state.level < 1) {
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_label_set_text(label, "X");
-    }
-
-    if (state.level < 1)
-    {
-        lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
-        lv_label_set_text(label, "X");
-    } else if (state.level <= 10) {
-        lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_YELLOW), 0);
-        lv_label_set_text_fmt(label, "%4u", state.level);
     } else {
-        lv_obj_set_style_text_color(label, lv_color_white(), 0);
+        lv_obj_set_style_text_color(label, battery_level_color(state.level), 0);
         lv_label_set_text_fmt(label, "%4u", state.level);
     }
     

@@ -216,4 +216,64 @@ config DONGLE_SCREEN_SYSTEM_ICON
     help
         The icon to display when the 'LGUI'/'RGUI' is pressed. Can be used to better match the Mod Widget to the underlying system.
         (0: macOS, 1: Linux, 2: Windows)
+
+# WPM color thresholds
+config DONGLE_SCREEN_WPM_HIGH_THRESHOLD
+    int "WPM threshold for high (green) color — WPM >= this value uses high color"
+    default 100
+
+config DONGLE_SCREEN_WPM_MID_THRESHOLD
+    int "WPM threshold for mid (yellow) color — WPM >= this value uses mid color"
+    default 50
+
+config DONGLE_SCREEN_WPM_COLOR_HIGH
+    hex "WPM title color when speed is high (RGB hex, default 0x00ff00 = green)"
+    default 0x00ff00
+
+config DONGLE_SCREEN_WPM_COLOR_MID
+    hex "WPM title color when speed is mid (RGB hex, default 0xffff00 = yellow)"
+    default 0xffff00
+
+config DONGLE_SCREEN_WPM_COLOR_LOW
+    hex "WPM title color when speed is low (RGB hex, default 0xff0000 = red)"
+    default 0xff0000
+
+# Output (USB/BLE) colors
+config DONGLE_SCREEN_USB_COLOR_CONNECTED
+    hex "USB label color when connected/HID-ready (RGB hex, default 0x800080 = purple)"
+    default 0x800080
+
+config DONGLE_SCREEN_USB_COLOR_DISCONNECTED
+    hex "USB label color when not ready (RGB hex, default 0xff0000 = red)"
+    default 0xff0000
+
+config DONGLE_SCREEN_BLE_COLOR
+    hex "BLE label color (RGB hex, default 0x0000ff = blue)"
+    default 0x0000ff
+
+# Layer colors
+config DONGLE_SCREEN_LAYER_BASE_COLOR
+    hex "Layer label color for the base layer (index 0) (RGB hex, default 0xffffff = white)"
+    default 0xffffff
+
+config DONGLE_SCREEN_LAYER_OTHER_COLOR
+    hex "Layer label color for non-base layers (RGB hex, default 0xffff00 = yellow)"
+    default 0xffff00
+
+# Battery color thresholds
+config DONGLE_SCREEN_BATTERY_GREEN_THRESHOLD
+    int "Battery level threshold for green color (level >= this value)"
+    default 85
+    range 1 100
+
+config DONGLE_SCREEN_BATTERY_YELLOW_THRESHOLD
+    int "Battery level threshold for yellow color (level >= this value)"
+    default 70
+    range 1 100
+
+config DONGLE_SCREEN_BATTERY_ORANGE_THRESHOLD
+    int "Battery level threshold for orange color (level >= this value)"
+    default 40
+    range 1 100
+
 endif

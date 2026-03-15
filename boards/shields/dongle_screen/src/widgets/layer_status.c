@@ -41,6 +41,12 @@ static void set_layer_symbol(lv_obj_t *label, struct layer_status_state state)
 
         lv_label_set_text(label, text);
     }
+
+    if (state.index == 0) {
+        lv_obj_set_style_text_color(label, lv_color_hex(CONFIG_DONGLE_SCREEN_LAYER_BASE_COLOR), 0);
+    } else {
+        lv_obj_set_style_text_color(label, lv_color_hex(CONFIG_DONGLE_SCREEN_LAYER_OTHER_COLOR), 0);
+    }
 }
 
 static void layer_status_update_cb(struct layer_status_state state)
