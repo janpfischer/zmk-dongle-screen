@@ -24,17 +24,16 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
-/* Panel dimensions */
-#define STATUS_BOX_WIDTH    160
-#define STATUS_BOX_HEIGHT   44
+#define STATUS_BOX_WIDTH       160
+#define STATUS_BOX_HEIGHT      44
+#define STATUS_FIELD_WIDTH     42
 
-/* Panel colors */
-#define STATUS_BG_COLOR      0x244766
-#define STATUS_BORDER_COLOR  0x79A8C7
-#define STATUS_SHADOW_COLOR  0x5085AC
-#define STATUS_ACCENT_COLOR  0x56BFD8
+#define STATUS_BG_COLOR        0x244766
+#define STATUS_BORDER_COLOR    0x79A8C7
+#define STATUS_SHADOW_COLOR    0x5085AC
+#define STATUS_ACCENT_COLOR    0x56BFD8
+#define STATUS_SEPARATOR_COLOR 0x91A5BD
 
-/* Child indexes inside the status panel */
 #define BLE_STATUS_CHILD_INDEX 2
 #define TRIANGLE_CHILD_INDEX   5
 
@@ -58,41 +57,16 @@ static struct output_status_state get_state(const zmk_event_t *_eh)
     };
 }
 
-
-/*
- * Create a filled upward-pointing triangle.
- *
- * Size: 15 x 8 pixels
- *
- *        #
- *       ###
- *      #####
- *     #######
- *    #########
- *   ###########
- *  #############
- * ###############
- */
 static lv_obj_t *create_selection_triangle(lv_obj_t *parent)
 {
     lv_obj_t *triangle = lv_obj_create(parent);
 
     lv_obj_set_size(triangle, 15, 8);
-
-    lv_obj_set_style_bg_opa(
-        triangle, LV_OPA_TRANSP, LV_PART_MAIN);
-
-    lv_obj_set_style_border_width(
-        triangle, 0, LV_PART_MAIN);
-
-    lv_obj_set_style_pad_all(
-        triangle, 0, LV_PART_MAIN);
-
-    lv_obj_set_style_radius(
-        triangle, 0, LV_PART_MAIN);
-
-    lv_obj_clear_flag(
-        triangle, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_style_bg_opa(triangle, LV_OPA_TRANSP, LV_PART_MAIN);
+    lv_obj_set_style_border_width(triangle, 0, LV_PART_MAIN);
+    lv_obj_set_style_pad_all(triangle, 0, LV_PART_MAIN);
+    lv_obj_set_style_radius(triangle, 0, LV_PART_MAIN);
+    lv_obj_clear_flag(triangle, LV_OBJ_FLAG_SCROLLABLE);
 
     for (int row = 0; row < 8; row++)
     {
@@ -104,22 +78,28 @@ static lv_obj_t *create_selection_triangle(lv_obj_t *parent)
         lv_obj_set_style_bg_color(
             pixel_row,
             lv_color_hex(STATUS_ACCENT_COLOR),
-            LV_PART_MAIN);
+            LV_PART_MAIN
+        );
 
         lv_obj_set_style_bg_opa(
-            pixel_row, LV_OPA_COVER, LV_PART_MAIN);
+            pixel_row, LV_OPA_COVER, LV_PART_MAIN
+        );
 
         lv_obj_set_style_border_width(
-            pixel_row, 0, LV_PART_MAIN);
+            pixel_row, 0, LV_PART_MAIN
+        );
 
         lv_obj_set_style_radius(
-            pixel_row, 0, LV_PART_MAIN);
+            pixel_row, 0, LV_PART_MAIN
+        );
 
         lv_obj_set_style_pad_all(
-            pixel_row, 0, LV_PART_MAIN);
+            pixel_row, 0, LV_PART_MAIN
+        );
 
         lv_obj_clear_flag(
-            pixel_row, LV_OBJ_FLAG_SCROLLABLE);
+            pixel_row, LV_OBJ_FLAG_SCROLLABLE
+        );
     }
 
     return triangle;
@@ -132,13 +112,11 @@ static void set_status_symbol(
     const char *usb_color = "ffffff";
     const char *ble_color = "ffffff";
 
-    /* Original USB status colors */
     if (!state.usb_is_hid_ready)
     {
         usb_color = "ff0000";
     }
 
-    /* Original BLE status colors */
     if (state.active_profile_connected)
     {
         ble_color = "00ff00";
@@ -148,29 +126,18 @@ static void set_status_symbol(
         ble_color = "0000ff";
     }
 
-    /*
-     * The outer widget contains the status panel.
-     * Inside the panel:
-     * 0 = USB label
-     * 1 = first separator
-     * 2 = BLE label
-     * 3 = second separator
-     * 4 = Bluetooth profile number
-     * 5 = selection triangle
-     */
     lv_obj_t *status_box =
         lv_obj_get_child(widget->obj, 0);
 
     lv_obj_t *ble_status_label =
-        lv_obj_get_child(
-            status_box, BLE_STATUS_CHILD_INDEX);
+        lv_obj_get_child(status_box, BLE_STATUS_CHILD_INDEX);
 
     lv_obj_t *triangle =
-        lv_obj_get_child(
-            status_box, TRIANGLE_CHILD_INDEX);
+        lv_obj_get_child(status_box, TRIANGLE_CHILD_INDEX);
 
-    /* Update USB status */
     char usb_text[32];
+    char ble_text[32];
+    char profile_text[12];
 
     snprintf(
         usb_text,
@@ -179,24 +146,12 @@ static void set_status_symbol(
         usb_color
     );
 
-    lv_label_set_text(
-        widget->transport_label, usb_text);
-
-    /* Update BLE status */
-    char ble_text[32];
-
     snprintf(
         ble_text,
         sizeof(ble_text),
         "#%s BLE#",
         ble_color
     );
-
-    lv_label_set_text(
-        ble_status_label, ble_text);
-
-    /* Update active Bluetooth profile */
-    char profile_text[12];
 
     snprintf(
         profile_text,
@@ -205,20 +160,16 @@ static void set_status_symbol(
         state.active_profile_index + 1
     );
 
-    lv_label_set_text(
-        widget->ble_label, profile_text);
+    lv_label_set_text(widget->transport_label, usb_text);
+    lv_label_set_text(ble_status_label, ble_text);
+    lv_label_set_text(widget->ble_label, profile_text);
 
-    /*
-     * Recalculate label positions before moving
-     * the triangle underneath the selected output.
-     */
     lv_obj_update_layout(status_box);
 
     switch (state.selected_endpoint.transport)
     {
     case ZMK_TRANSPORT_USB:
-        lv_obj_clear_flag(
-            triangle, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_clear_flag(triangle, LV_OBJ_FLAG_HIDDEN);
 
         lv_obj_align_to(
             triangle,
@@ -230,8 +181,7 @@ static void set_status_symbol(
         break;
 
     case ZMK_TRANSPORT_BLE:
-        lv_obj_clear_flag(
-            triangle, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_clear_flag(triangle, LV_OBJ_FLAG_HIDDEN);
 
         lv_obj_align_to(
             triangle,
@@ -243,8 +193,7 @@ static void set_status_symbol(
         break;
 
     default:
-        lv_obj_add_flag(
-            triangle, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(triangle, LV_OBJ_FLAG_HIDDEN);
         break;
     }
 }
@@ -280,177 +229,236 @@ int zmk_widget_output_status_init(
     struct zmk_widget_output_status *widget,
     lv_obj_t *parent)
 {
-    /* Transparent outer widget */
     widget->obj = lv_obj_create(parent);
 
-    lv_obj_set_size(widget->obj, 240, 64);
-
+    lv_obj_set_size(widget->obj, 240, 80);
     lv_obj_set_style_bg_opa(
-        widget->obj, LV_OPA_TRANSP, LV_PART_MAIN);
-
+        widget->obj, LV_OPA_TRANSP, LV_PART_MAIN
+    );
     lv_obj_set_style_border_width(
-        widget->obj, 0, LV_PART_MAIN);
-
+        widget->obj, 0, LV_PART_MAIN
+    );
     lv_obj_set_style_pad_all(
-        widget->obj, 0, LV_PART_MAIN);
-
+        widget->obj, 0, LV_PART_MAIN
+    );
     lv_obj_clear_flag(
-        widget->obj, LV_OBJ_FLAG_SCROLLABLE);
+        widget->obj, LV_OBJ_FLAG_SCROLLABLE
+    );
 
-    /* Main connection panel */
     lv_obj_t *status_box = lv_obj_create(widget->obj);
 
     lv_obj_set_size(
-        status_box,
-        STATUS_BOX_WIDTH,
-        STATUS_BOX_HEIGHT
+        status_box, STATUS_BOX_WIDTH, STATUS_BOX_HEIGHT
     );
 
     lv_obj_align(
-        status_box,
-        LV_ALIGN_TOP_MID,
-        0,
-        8
+        status_box, LV_ALIGN_TOP_MID, 0, 8
     );
 
-    /* Panel background */
     lv_obj_set_style_bg_color(
         status_box,
         lv_color_hex(STATUS_BG_COLOR),
-        LV_PART_MAIN);
+        LV_PART_MAIN
+    );
 
     lv_obj_set_style_bg_opa(
-        status_box, LV_OPA_COVER, LV_PART_MAIN);
+        status_box, LV_OPA_COVER, LV_PART_MAIN
+    );
 
-    /* Border */
     lv_obj_set_style_border_color(
         status_box,
         lv_color_hex(STATUS_BORDER_COLOR),
-        LV_PART_MAIN);
+        LV_PART_MAIN
+    );
 
     lv_obj_set_style_border_width(
-        status_box, 1, LV_PART_MAIN);
+        status_box, 1, LV_PART_MAIN
+    );
 
     lv_obj_set_style_radius(
-        status_box, 6, LV_PART_MAIN);
+        status_box, 6, LV_PART_MAIN
+    );
 
-    /* Soft blue shadow */
     lv_obj_set_style_shadow_color(
         status_box,
         lv_color_hex(STATUS_SHADOW_COLOR),
-        LV_PART_MAIN);
+        LV_PART_MAIN
+    );
 
     lv_obj_set_style_shadow_width(
-        status_box, 8, LV_PART_MAIN);
+        status_box, 16, LV_PART_MAIN
+    );
 
     lv_obj_set_style_shadow_opa(
-        status_box, 90, LV_PART_MAIN);
+        status_box, 170, LV_PART_MAIN
+    );
 
     lv_obj_set_style_shadow_spread(
-        status_box, 1, LV_PART_MAIN);
+        status_box, 2, LV_PART_MAIN
+    );
 
     lv_obj_set_style_shadow_ofs_x(
-        status_box, 0, LV_PART_MAIN);
+        status_box, 0, LV_PART_MAIN
+    );
 
     lv_obj_set_style_shadow_ofs_y(
-        status_box, 1, LV_PART_MAIN);
+        status_box, 2, LV_PART_MAIN
+    );
 
     lv_obj_set_style_pad_all(
-        status_box, 0, LV_PART_MAIN);
+        status_box, 0, LV_PART_MAIN
+    );
 
     lv_obj_clear_flag(
-        status_box, LV_OBJ_FLAG_SCROLLABLE);
+        status_box, LV_OBJ_FLAG_SCROLLABLE
+    );
 
-    /*
-     * Row layout:
-     *
-     * USB  |  BLE  |  3
-     *
-     * Triangle is positioned beneath
-     * USB or BLE independently.
-     */
+    /* USB */
+    widget->transport_label = lv_label_create(status_box);
 
-    /* USB label - child 0 */
-    widget->transport_label =
-        lv_label_create(status_box);
+    lv_label_set_recolor(widget->transport_label, true);
+    lv_label_set_long_mode(
+        widget->transport_label, LV_LABEL_LONG_CLIP
+    );
 
-    lv_label_set_recolor(
-        widget->transport_label, true);
+    lv_obj_set_width(
+        widget->transport_label, STATUS_FIELD_WIDTH
+    );
+
+    lv_obj_set_style_text_align(
+        widget->transport_label,
+        LV_TEXT_ALIGN_CENTER,
+        LV_PART_MAIN
+    );
+
+    lv_obj_set_style_text_letter_space(
+        widget->transport_label, 0, LV_PART_MAIN
+    );
 
     lv_obj_align(
         widget->transport_label,
         LV_ALIGN_TOP_LEFT,
-        13,
+        8,
         7
     );
 
-    /* First separator - child 1 */
+    /* First separator */
     lv_obj_t *separator1 = lv_label_create(status_box);
 
     lv_label_set_text(separator1, "|");
+    lv_obj_set_width(separator1, 8);
 
     lv_obj_set_style_text_color(
         separator1,
-        lv_color_hex(0x91A5BD),
-        LV_PART_MAIN);
+        lv_color_hex(STATUS_SEPARATOR_COLOR),
+        LV_PART_MAIN
+    );
+
+    lv_obj_set_style_text_align(
+        separator1, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN
+    );
+
+    lv_obj_set_style_text_letter_space(
+        separator1, 0, LV_PART_MAIN
+    );
 
     lv_obj_align(
         separator1,
         LV_ALIGN_TOP_LEFT,
-        54,
+        51,
         7
     );
 
-    /* BLE label - child 2 */
-    lv_obj_t *ble_status_label =
-        lv_label_create(status_box);
+    /* BLE */
+    lv_obj_t *ble_status_label = lv_label_create(status_box);
 
-    lv_label_set_recolor(
-        ble_status_label, true);
+    lv_label_set_recolor(ble_status_label, true);
+    lv_label_set_long_mode(
+        ble_status_label, LV_LABEL_LONG_CLIP
+    );
+
+    lv_obj_set_width(
+        ble_status_label, STATUS_FIELD_WIDTH
+    );
+
+    lv_obj_set_style_text_align(
+        ble_status_label,
+        LV_TEXT_ALIGN_CENTER,
+        LV_PART_MAIN
+    );
+
+    lv_obj_set_style_text_letter_space(
+        ble_status_label, 0, LV_PART_MAIN
+    );
 
     lv_obj_align(
         ble_status_label,
         LV_ALIGN_TOP_LEFT,
-        72,
+        60,
         7
     );
 
-    /* Second separator - child 3 */
+    /* Second separator */
     lv_obj_t *separator2 = lv_label_create(status_box);
 
     lv_label_set_text(separator2, "|");
+    lv_obj_set_width(separator2, 8);
 
     lv_obj_set_style_text_color(
         separator2,
-        lv_color_hex(0x91A5BD),
-        LV_PART_MAIN);
+        lv_color_hex(STATUS_SEPARATOR_COLOR),
+        LV_PART_MAIN
+    );
+
+    lv_obj_set_style_text_align(
+        separator2, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN
+    );
+
+    lv_obj_set_style_text_letter_space(
+        separator2, 0, LV_PART_MAIN
+    );
 
     lv_obj_align(
         separator2,
         LV_ALIGN_TOP_LEFT,
-        113,
+        103,
         7
     );
 
-    /* Bluetooth profile number - child 4 */
+    /* Bluetooth profile */
     widget->ble_label = lv_label_create(status_box);
 
+    lv_label_set_long_mode(
+        widget->ble_label, LV_LABEL_LONG_CLIP
+    );
+
+    lv_obj_set_width(
+        widget->ble_label, STATUS_FIELD_WIDTH
+    );
+
     lv_obj_set_style_text_color(
+        widget->ble_label, lv_color_white(), LV_PART_MAIN
+    );
+
+    lv_obj_set_style_text_align(
         widget->ble_label,
-        lv_color_white(),
-        LV_PART_MAIN);
+        LV_TEXT_ALIGN_CENTER,
+        LV_PART_MAIN
+    );
+
+    lv_obj_set_style_text_letter_space(
+        widget->ble_label, 0, LV_PART_MAIN
+    );
 
     lv_obj_align(
         widget->ble_label,
         LV_ALIGN_TOP_LEFT,
-        133,
+        112,
         7
     );
 
-    /* Filled selection triangle - child 5 */
     create_selection_triangle(status_box);
 
-    /* Register widget */
     sys_slist_append(&widgets, &widget->node);
 
     widget_output_status_init();
