@@ -46,12 +46,13 @@ lv_obj_t *zmk_display_status_screen()
     lv_obj_t *screen;
 
 
+
 screen = lv_obj_create(NULL);
 lv_obj_set_style_bg_color(screen, lv_color_hex(0x183654), LV_PART_MAIN);
 lv_obj_set_style_bg_grad_color(screen, lv_color_hex(0x000000), LV_PART_MAIN);
 lv_obj_set_style_bg_grad_dir(screen, LV_GRAD_DIR_VER, LV_PART_MAIN);
 lv_obj_set_style_bg_opa(screen, LV_OPA_COVER, LV_PART_MAIN);
-
+lv_obj_set_style_bg_dither_mode(screen, LV_DITHER_ORDERED, LV_PART_MAIN);
 
     lv_style_init(&global_style);
     // lv_style_set_text_font(&global_style, &lv_font_unscii_8); // ToDo: Font is not recognized
