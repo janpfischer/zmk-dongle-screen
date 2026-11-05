@@ -81,10 +81,18 @@ lv_obj_set_style_bg_dither_mode(screen, LV_DITHER_ORDERED, LV_PART_MAIN);
     lv_obj_align(zmk_widget_wpm_status_obj(&wpm_status_widget), LV_ALIGN_TOP_LEFT, 70, 0);
 #endif
 
+
 #if CONFIG_DONGLE_SCREEN_LAYER_ACTIVE
     zmk_widget_layer_status_init(&layer_status_widget, screen);
-    lv_obj_align(zmk_widget_layer_status_obj(&layer_status_widget), LV_ALIGN_CENTER, 0, 0);
+
+    lv_obj_t *layer_obj = zmk_widget_layer_status_obj(&layer_status_widget);
+    lv_obj_set_style_bg_opa(layer_obj, LV_OPA_TRANSP, LV_PART_MAIN);
+    lv_obj_set_style_border_width(layer_obj, 0, LV_PART_MAIN);
+    lv_obj_set_style_outline_width(layer_obj, 0, LV_PART_MAIN);
+    lv_obj_set_style_shadow_width(layer_obj, 0, LV_PART_MAIN);
+    lv_obj_align(layer_obj, LV_ALIGN_CENTER, 0, 0);
 #endif
+
 
 #if CONFIG_DONGLE_SCREEN_MODIFIER_ACTIVE
     zmk_widget_mod_status_init(&mod_widget, screen);
