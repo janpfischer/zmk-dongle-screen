@@ -47,7 +47,21 @@ lv_obj_t *zmk_display_status_screen()
 
 
 
+
 screen = lv_obj_create(NULL);
+
+/* Diagnostic: solid background with no widgets */
+lv_obj_set_style_bg_color(
+    screen, lv_color_hex(0x183654), LV_PART_MAIN);
+
+lv_obj_set_style_bg_grad_dir(
+    screen, LV_GRAD_DIR_NONE, LV_PART_MAIN);
+
+lv_obj_set_style_bg_opa(
+    screen, LV_OPA_COVER, LV_PART_MAIN);
+
+return screen;
+
 lv_obj_set_style_bg_color(screen, lv_color_hex(0x183654), LV_PART_MAIN);
 lv_obj_set_style_bg_grad_color(screen, lv_color_hex(0x000000), LV_PART_MAIN);
 lv_obj_set_style_bg_grad_dir(screen, LV_GRAD_DIR_VER, LV_PART_MAIN);
@@ -82,7 +96,7 @@ lv_obj_set_style_bg_dither_mode(screen, LV_DITHER_ORDERED, LV_PART_MAIN);
 #endif
 
 
-#if 0
+#if CONFIG_DONGLE_SCREEN_LAYER_ACTIVE
     zmk_widget_layer_status_init(&layer_status_widget, screen);
     lv_obj_align(zmk_widget_layer_status_obj(&layer_status_widget), LV_ALIGN_CENTER, 0, 0);
 #endif
