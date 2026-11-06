@@ -82,7 +82,7 @@ lv_obj_set_style_bg_dither_mode(screen, LV_DITHER_ORDERED, LV_PART_MAIN);
 #endif
 
 
-#if CONFIG_DONGLE_SCREEN_LAYER_ACTIVE
+#if 0
     zmk_widget_layer_status_init(&layer_status_widget, screen);
     lv_obj_align(zmk_widget_layer_status_obj(&layer_status_widget), LV_ALIGN_CENTER, 0, 0);
 #endif
