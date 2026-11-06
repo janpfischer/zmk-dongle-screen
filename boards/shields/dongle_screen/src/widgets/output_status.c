@@ -276,7 +276,7 @@ int zmk_widget_output_status_init(
     );
 
     lv_obj_set_style_radius(
-        status_box, 6, LV_PART_MAIN
+        status_box, 12, LV_PART_MAIN
     );
 
     lv_obj_set_style_shadow_color(
@@ -286,15 +286,15 @@ int zmk_widget_output_status_init(
     );
 
     lv_obj_set_style_shadow_width(
-        status_box, 16, LV_PART_MAIN
+        status_box, 14, LV_PART_MAIN
     );
 
     lv_obj_set_style_shadow_opa(
-        status_box, 170, LV_PART_MAIN
+        status_box, 150, LV_PART_MAIN
     );
 
     lv_obj_set_style_shadow_spread(
-        status_box, 2, LV_PART_MAIN
+        status_box, 1, LV_PART_MAIN
     );
 
     lv_obj_set_style_shadow_ofs_x(
@@ -302,7 +302,7 @@ int zmk_widget_output_status_init(
     );
 
     lv_obj_set_style_shadow_ofs_y(
-        status_box, 2, LV_PART_MAIN
+        status_box, 0, LV_PART_MAIN
     );
 
     lv_obj_set_style_pad_all(
